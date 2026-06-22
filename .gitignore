@@ -1,3 +1,5 @@
 .lakebed/
 .env.lakebed.server
 *.txt
+AGENTS.md
+CLAUDE.md
