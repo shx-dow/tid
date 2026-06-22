@@ -1,7 +1,7 @@
 import { capsule, endpoint, text } from "lakebed/server";
 
 export default capsule({
-  name: "theowishes",
+  name: "theoideadump",
   schema: {},
   queries: {},
   mutations: {},
