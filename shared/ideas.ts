@@ -9,53 +9,49 @@ export const ideas: Idea[] = [
   {
     id: 1,
     title: "Better NPM",
-    tagline: "Reimagine package management from the ground up — security, publishing, visibility, and NPX.",
+    tagline: "NPM is rotting from the inside. Build something better before it takes the whole ecosystem down with it.",
     sections: [
       {
         heading: "Revocable Releases",
         points: [
-          "If a package has been installed under 100 times or has been up for under 5 hours, the author should be able to revoke it.",
-          "Accidentally publishing the wrong version number shouldn't be permanent — TanStack Query's latest version is broken because of a typo that can never be taken back.",
+          "Less than 100 downloads or under 5 hours old? Let the author pull it back. That's it. No permanent record of your f*ckup.",
+          "Typo a version number and it's immortal. TanStack Query's latest release is permanently busted because of exactly this. Fixable — but NPM won't touch it.",
         ],
       },
       {
         heading: "Paid AI-Powered Audits",
         points: [
-          "Let authors pay a small amount (e.g. 50¢) for an agent to read and score every release before it goes out.",
-          "Integrate with Anthropic or other AI APIs to diff each release and give a safety vibe check.",
-          "Audit results should be run on a verified third party so authors can't fake their own scores.",
+          "Plug in an API key. Every release gets diffed and scored for safety. 50 cents a pop. Cheap insurance.",
+          "Runs on a verified third party so you can't fake your own score. Actual risk numbers before every install. This alone would change everything.",
         ],
       },
       {
         heading: "Package Metadata & Visibility",
         points: [
-          "Show whether a package is obfuscated or readable, open source or not, backed by known people or anonymous.",
-          "Display who published the last release, what permissions the package needs, and how risky it is.",
-          "Surface all this metadata both on the NPM site and in the CLI when you install — not just a random version number.",
+          "Is it obfuscated or readable? Open source or closed? Who pushed it? All of that should be right there, in your face, before you install.",
+          "Right now npx shows you a version number and asks yes or no. That's the whole security theater. Nothing about size, author, permissions, risk. How the f*ck do you decide?",
+          "Someone publishes 'is-odd' with a zero instead of an O. Same look, same flow, completely malicious. The platform can't tell the difference. That's not a bug — it's a design-level failure.",
         ],
       },
       {
         heading: "Kill Name Squatting",
         points: [
-          "The TanStack package on NPM isn't owned by Tanner — it's squatted by someone who tried to extort him, then sold it to a sketchy company.",
-          "Add a verification process (human or agent-driven) to review squatted names and hand them over to the rightful owners.",
-          "Hard-ban name squatting — any real open source platform should treat this as illegal.",
+          "TanStack on NPM isn't owned by Tanner. Some asshole squatted it, tried to shake him down, then sold it to a scam outfit.",
+          "Verification process — human or agent. Review disputes, hand over names. Any platform that pretends to care about open source needs to ban this sh*t on sight.",
         ],
       },
       {
         heading: "Better NPX CLI",
         points: [
-          "When running npx, show package size, recent author, safety score, and permissions instead of a meaningless version number.",
-          "Let agents read this metadata and make informed decisions about whether to run a command.",
-          "If a package gets hijacked, the agent or user should get a heads-up that something might be insecure.",
+          "Show the size. Show the author. Show the safety score and what permissions it needs. A version number tells me nothing.",
+          "Agents make this worse. A skill.md tells your agent to run npx, someone hijacks the package, and now your agent is executing malware. The CLI needs to give agents enough to flag the risk.",
         ],
       },
       {
         heading: "Private Registries",
         points: [
-          "Support private registries where you can publish packages that aren't publicly released but are available within your environment.",
-          "Private registry should be the default over the public registry for your team.",
-          "Shareable software in the form of packages is incredible — the current architecture assumes every package is expensive to make and has full-time maintainers.",
+          "Publish to your own registry. It takes priority over public by default. Internal tools, internal access, no ceremony.",
+          "The whole system assumes every package costs a fortune and has a full-time babysitter. Most packages are tiny scripts. The model is wrong and nobody's fixing it.",
         ],
       },
     ],
@@ -63,48 +59,43 @@ export const ideas: Idea[] = [
   {
     id: 2,
     title: "Reinvent Source Control",
-    tagline: "Git was built for Linux kernel development in 2005. The world has changed — it's time to unfuck Git.",
+    tagline: "Git was built for Linus in 2005. You are not the Linux kernel. Stop using tools that don't fit.",
     sections: [
       {
         heading: "Granular Permissions",
         points: [
-          "Why can't you have private files in a repo? Some files should only be accessible to certain people.",
-          "Why can't you have a private branch or a PR that stays private until it merges?",
-          "The idea of public/private being a repo-level setting instead of a change-level option is insane.",
-          "Let repos be mono-repos with some sub-packages that are private without splitting into multiple repos.",
+          "Private files in a repo. Why the f*ck is that not a thing?",
+          "Private branches. PRs that stay invisible until merge. Public/private is a repo toggle right now. Should be a per-change setting. This is not complicated.",
+          "Projects get carved into five repos just to open source the safe parts. The tool is dictating your architecture. That's backwards.",
         ],
       },
       {
         heading: "Better .env Handling",
         points: [
-          "Why can't we commit .env files? The real reason is Git makes everything available to everyone forever.",
-          "The existence of dozens of companies just to manage secrets that resolve to a random file on your computer shows Git is failing us.",
-          "Environment variables should sync naturally without third-party services.",
+          "You can't commit .env because Git shows everything to everyone forever. That's not a law of nature. That's a Git problem.",
+          "Entire companies exist to manage env vars that live in a text file on your machine. The fact that this is an industry says everything about how broken Git is.",
         ],
       },
       {
         heading: "Private Security Fixes",
         points: [
-          "Linux security patches get read by agents who mine for zero-days before they're even announced.",
-          "Imagine merging a security fix, cutting a release, and patching all vulnerable distros before the code is made public.",
-          "Open source shouldn't mean 100% of code is public 100% of the time.",
+          "Linux patches a CVE. Agents scrape the diff before the fix ships. Attackers get zero-days for free.",
+          "Merge a fix. Cut a release. Patch everyone. Then go public. Is that pure open source? Don't care. We're in a security crisis and playing purity games.",
         ],
       },
       {
         heading: "Commits Are the Wrong Primitive",
         points: [
-          "JJ shows that snapshots and tags are a much stronger model than commits and branches.",
-          "We waste so much time worrying about history — JJ is a breath of fresh air.",
-          "Work trees are atrocious — one agent can check out main in a work tree and now you can't check out main in your main directory.",
+          "JJ proved it. Snapshots and tags crush commits and branches. So much time wasted on history that doesn't matter.",
+          "Work trees are a disaster. One agent checks out main in a work tree and suddenly main is hostage. A random side directory held your primary branch ransom. Think about how stupid that is.",
         ],
       },
       {
         heading: "Break Free from File Systems",
         points: [
-          "Source control shouldn't require real operating systems or file systems.",
-          "APFS (Apple's file system) is garbage at small file reads/writes — cloning on an M4 Mac takes 31 seconds vs 6.8 seconds on Ubuntu with an old AMD CPU.",
-          "An M1 Ultra can take 140 seconds for a task a similar Mac on Ubuntu does in 3-12 seconds.",
-          "In-memory operations (like just bash's JS/TS layer) should replace file system–bound operations.",
+          "Source control shouldn't need a real OS. Just bash runs dev environments in memory inside JS. Clone without touching disk.",
+          "APFS is hot garbage at small files. M4 Mac: 31 seconds to clone. Same task on Ubuntu with a mid-range AMD CPU and a normal SSD: 6.8 seconds. M1 Ultra: 140 seconds. Same. Exact. Task.",
+          "In-memory ops dodge all these platform-specific nightmares. Node buffers don't care about your janky file system.",
         ],
       },
     ],
@@ -112,30 +103,27 @@ export const ideas: Idea[] = [
   {
     id: 3,
     title: "Dropbox for Devs",
-    tagline: "Sync your entire code folder across every machine — environment variables, structure, and files — without effort.",
+    tagline: "Your code folder should just be the same everywhere. Stop manually syncing sh*t between machines.",
     sections: [
       {
         heading: "Universal Code Sync",
         points: [
-          "Have your code folder, structure, and contents mirrored across all your machines automatically — like Dropbox, but for developer environments.",
-          "Spin up a Mac Mini downstairs or a GMK Tech Box on Ubuntu and everything is there the same way it was on your main machine.",
-          "Environment variables sync totally fine across machines.",
+          "Multiple machines, different OSes, one folder. Structure and contents mirrored everywhere. Dropbox but for people who write code.",
+          "Env vars sync too. No more 'works on my machine' because your other machine doesn't have the right secrets.",
         ],
       },
       {
         heading: "Lazy File Fetching",
         points: [
-          "When you navigate to or touch a section of the code folder, pull that part down on-demand at that moment.",
-          "No need to clone entire repos — get what you need when you need it.",
-          "Node modules would need some OS-specific handling, but the idea is code structure syncs, contents stream.",
+          "Structure is always there. Files pull down when you navigate to them. No upfront cloning, no stale work trees.",
+          "Node modules need OS-specific handling, fine. Core idea: structure is universal, contents stream on touch.",
         ],
       },
       {
         heading: "Not Based on Git",
         points: [
-          "Managing repos across machines with Git means submodule hell or manual cloning everywhere — nobody wants that.",
-          "This would be a Dropbox/Google Drive-like layer with its own equivalent of .gitignore.",
-          "The dream: your code folder structured one way, and any machine or cloud agent you spin up has all of it — or at least the structure — ready to go.",
+          "Git across machines means manual cloning or submodule hell. Both f*cking suck.",
+          "Dream: Dropbox with a .gitignore. One structure, every machine and agent has it, zero effort.",
         ],
       },
     ],
@@ -143,38 +131,36 @@ export const ideas: Idea[] = [
   {
     id: 4,
     title: "New Mobile Platform",
-    tagline: "A mobile OS that runs Android apps but is fundamentally different — open, hackable, and built for developers.",
+    tagline: "Apple takes 30% and Google barely tries. Mobile needs a third option before the duopoly kills innovation entirely.",
     sections: [
       {
         heading: "Break the Duopoly",
         points: [
-          "Apple bans whatever it doesn't like, takes 30% of all digital goods, and makes the developer experience miserable (Info.plist with one dev's config hardcoded in source control).",
-          "Google arbitrarily bans apps with no explanation and barely invests in Android — it's slowly languishing.",
-          "Both platforms are terrible — Apple gives you a bad reason, Google gives you no reason.",
+          "Apple bans whatever it wants, takes 30% of every transaction, and bakes your personal info into files that end up in source control. The whole experience is hostile to developers.",
+          "Google bans you with zero explanation and puts no money into Android. At least Apple tells you why, even if the reason is stupid. Google just says no and walks away.",
+          "You can order an Uber with a credit card but can't buy a game without Apple's 30%. That's not policy. That's extortion.",
         ],
       },
       {
-        heading: "Android Compatibility (Like BlackBerry 10)",
+        heading: "Android Compatibility",
         points: [
-          "BlackBerry 10 proved you can build a different OS and still run Android apps via a built-in runtime.",
-          "Today's CPUs are powerful enough that virtualization overhead would be much lower than in the BlackBerry era.",
-          "You don't lose the Android app ecosystem — you build on top of it.",
+          "BlackBerry 10 already proved this works. Different OS, Android apps through a runtime. CPUs today are fast enough that overhead barely matters.",
+          "App gap solved from day one. Build something new without throwing away the existing ecosystem.",
         ],
       },
       {
         heading: "NPM for Mobile",
         points: [
-          "Scan a QR code to have an app on your device and running — instant distribution, no store approval.",
-          "An app ecosystem that encourages forking and modifying apps, with JIT compilation support.",
-          "Like the internet, Linux, or macOS — open, progressive, accessible for building cool things.",
+          "Someone demos an app. Scan a QR code. It's on your phone. No store, no approval, no 30%. Just working software.",
+          "Fork apps. Modify them. JIT compilation. Build on your phone without rebuilding the OS.",
+          "Paul Henschel — Zustand, React Three Fiber — started with Paranoid Android. He would've stayed on mobile if the platform didn't s*ck so bad. One of the best devs in the React world lost because mobile was too painful to build for.",
         ],
       },
       {
         heading: "The Last Chance",
         points: [
-          "Android is getting more and more closed. Now might be the last time to build a truly open mobile platform.",
-          "Paul Henschel (creator of Zustand, React Three Fiber, Poimanders) started with Paranoid Android — a custom ROM. He would have become a mobile dev if mobile dev didn't suck. We lost one of the greatest devs because the platform was too hard to build for.",
-          "CyanogenMod and Paranoid Android proved that an ecosystem of independent devs building custom ROMs for fun is possible — we need that experimental spirit back.",
+          "Android is closing up every year. This might be the last window for a truly open mobile platform.",
+          "CyanogenMod and Paranoid Android proved independent devs making ROMs for fun isn't just possible — it thrived. That spirit needs to come back before it's gone.",
         ],
       },
     ],
@@ -182,38 +168,37 @@ export const ideas: Idea[] = [
   {
     id: 5,
     title: "Better Slack",
-    tagline: "A communication platform built on posts (not messages) with proper threading, context management, and first-class agent support.",
+    tagline: "Slack was built for sending messages, not reading them. Someone needs to unf*ck team communication.",
     sections: [
       {
         heading: "Posts > Messages",
         points: [
-          "Posts are a better primitive than messages — they fit somewhere between a channel and a thread.",
-          "Facebook's model works: top-level comments, nested threading, sub-nesting within comments, and old posts bump to the top when new replies come.",
-          "Slack's threads fall back in history even when active — finding them is impossible.",
+          "Messages are too granular. Posts sit between a channel and a thread. They carry context and don't vanish into the noise.",
+          "Facebook cracked this years ago. Top-level comments, nested replies, sub-nesting, old posts bumping on activity. Why does nothing else work like this?",
+          "Slack threads sink into history while still active. Finding a live conversation is genuinely hard. The app was built to SEND, not to READ.",
         ],
       },
       {
         heading: "Infinite Nesting & Context",
         points: [
-          "You should be able to branch off context — take a sub-comment, send an agent to explore, and come back with feedback.",
-          "Threads that make sense. Replies that make sense. Infinite nesting done right.",
-          "Inline replies instead of forcing everything into threads — Slack has no inline replies, which is absurd.",
+          "Branch a sub-comment. Send an agent to explore. Get results back. All in the same tree. That's the bar.",
+          "No inline replies in Slack. Someone says something in a thread and you can't target their message. Manual quote. In 2025. Embarrassing.",
         ],
       },
       {
         heading: "First-Class Agent Support",
         points: [
-          "Agents should be participants in the same control plane as humans, in a way that's logical.",
-          "Post something you want to work on, and when your agent replies, the post bumps back to the top.",
-          "Combine with something like Hermes Agent — no more impossible-to-manage Discord threads.",
+          "Agents should be native participants, not bots bolted on the side. Real citizens of the platform.",
+          "Post work. Agent picks it up. Does it. Replies. Post bumps to top. No more Discord hell where threads spawn into the abyss.",
+          "Facebook Workplace was the closest thing to this. They shut it down. The only platform that got context management right, and they killed it.",
         ],
       },
       {
         heading: "Open Source Standard",
         points: [
-          "Facebook Workplace was the closest thing to a good context management product — and they shut it down.",
-          "This should be an open-source standard, easy to adopt and play with, not to replace Slack overnight but to slowly replace it.",
-          "Microsoft Teams has some of these ideas but it's Microsoft Teams — it'll never be useful.",
+          "Open standard. Anyone can adopt it. Not a proprietary product you beg to use.",
+          "Not trying to kill Slack overnight. Just give people something better that slowly takes over because it actually works.",
+          "Microsoft Teams has some of these ideas. But it's Teams. Come on.",
         ],
       },
     ],
@@ -221,30 +206,30 @@ export const ideas: Idea[] = [
   {
     id: 6,
     title: "Weird Benchmarks",
-    tagline: "The best way to make AI models better at something is to measure how bad they are at it. Go build benchmarks.",
+    tagline: "Want models to get better at something? Prove they're bad at it. Build a benchmark.",
     sections: [
       {
         heading: "Benchmarks from Real People",
         points: [
-          "We need more benchmarks written by people other than researchers and labs — real developers with real problems.",
-          "Theo's SkateBench (measuring how well models can name a skateboard trick from a description) turned out to be useful because it spans complex grammar, niche language, and 3D spatial reasoning.",
-          "Researchers and labs actually hit up Theo asking about SkateBench — niche benchmarks fascinate them.",
+          "Most benchmarks come from labs. They should come from devs who actually hit real problems with these things.",
+          "SkateBench — naming skate tricks from descriptions — turned out useful. It hits grammar, niche language, and spatial reasoning. Researchers actually reach out about it.",
+          "Got a weird niche? Bench it. Measuring what nobody else measured can matter more than you think.",
         ],
       },
       {
         heading: "Measure What Matters",
         points: [
-          "Take the work you try to use AI for that fails, and save it in a reproducible way so you can try it again later.",
-          "CM Griffin just made GitBench — we need more benchmarks like that for agent capabilities.",
-          "Measure everything from weird hypotheses to real work.",
+          "AI fails you at something? Save it. Package it reproducibly. Now you have a real benchmark instead of another synthetic dataset.",
+          "GitBench for agent Git skills. More of that. Benchmarks for the actual sh*t people automate, not academic exercises.",
+          "Weird hypotheses. Real workflows. Everything. More data points = faster fixes.",
         ],
       },
       {
         heading: "Incentivize the Fix",
         points: [
-          "If models suck at Crystal (or any obscure language), make a benchmark that proves it — labs will go hard to improve their scores once they can measure it.",
-          "If you have a problem that agents suck at, building a benchmark that shows all agents suck at it is the best way to incentivize labs to fix it.",
-          "Be surprised how much you learn and how valuable those measurements can be — go build some weird benchmarks.",
+          "Models s*ck at Crystal or whatever language you love? Bench it. Once labs can measure the gap, they'll grind to close it.",
+          "Don't complain. Build a benchmark that shows the gap. Labs will come to you.",
+          "Go build weird benchmarks. You'll learn a lot, and your measurements might matter way more than you expect.",
         ],
       },
     ],
