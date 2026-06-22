@@ -1,117 +1,97 @@
-import { Link, Route, Router, Routes, SignInWithGoogle, signOut, useAuth, useMutation, useQuery } from "lakebed/client";
-import { useState } from "preact/hooks";
-import { cleanTodoText, type Todo } from "../shared/todo";
+import { ideas } from "../shared/ideas";
 
-function AuthAvatar({ label, picture }: { label: string; picture?: string }) {
-  const initial = label.trim().slice(0, 1).toUpperCase() || "?";
+const ideaEmojis = ["📦", "🔄", "☁️", "📱", "💬", "📊"];
 
-  if (picture) {
-    return (
-      <img
-        alt=""
-        className="h-7 w-7 shrink-0 rounded-full border border-neutral-800 bg-neutral-900 object-cover"
-        referrerPolicy="no-referrer"
-        src={picture}
-      />
-    );
-  }
-
+function Hero() {
   return (
-    <span
-      aria-hidden="true"
-      className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-neutral-800 bg-neutral-900 text-xs font-medium text-neutral-300"
-    >
-      {initial}
-    </span>
-  );
-}
-
-function TodoPage() {
-  const todos = useQuery<Todo[]>("todos");
-  const addTodo = useMutation<[text: string], void>("addTodo");
-
-  async function onSubmit(event: SubmitEvent) {
-    event.preventDefault();
-    const form = event.currentTarget as HTMLFormElement;
-    const data = new FormData(form);
-    const text = cleanTodoText(String(data.get("text") ?? ""));
-    if (!text) {
-      return;
-    }
-
-    await addTodo(text);
-    form.reset();
-  }
-
-  return (
-    <section>
-      <h1 className="mb-8 text-5xl font-bold tracking-tight">wtw</h1>
-      <form className="mb-8 flex gap-3" onSubmit={(event) => void onSubmit(event)}>
-        <input className="min-w-0 flex-1 border border-neutral-700 bg-black px-3 py-2 text-white outline-none focus:border-white" name="text" placeholder="Add a todo" />
-        <button className="border border-white px-4 py-2 font-medium" type="submit">Add</button>
-      </form>
-      <ul className="divide-y divide-neutral-800 border-y border-neutral-800">
-        {todos.map((todo) => (
-          <li className="py-3" key={todo.id}>{todo.text}</li>
+    <section className="border-b border-neutral-800 pb-16 pt-20">
+      <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
+        what<span className="text-yellow-400">theo</span>wishes
+      </h1>
+      <p className="mt-4 max-w-2xl text-lg text-neutral-400">
+        Theo — t3dotgg — has been keeping a list of ideas he wishes somebody would build.
+        He shared all of them. Here they are.
+      </p>
+      <div className="mt-8 flex flex-wrap gap-3">
+        {ideas.map((idea, i) => (
+          <a
+            key={idea.id}
+            className="rounded-full border border-neutral-700 px-4 py-1.5 text-sm text-neutral-300 hover:border-yellow-400/50 hover:text-yellow-400"
+            href={`#idea-${idea.id}`}
+          >
+            {ideaEmojis[i]} {idea.title}
+          </a>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }
 
-function StatusPage() {
-  const [status, setStatus] = useState("not checked");
-
-  async function checkStatus() {
-    const response = await fetch("api/status");
-    setStatus(response.ok ? await response.text() : "error " + response.status);
-  }
-
+function QuoteBanner() {
   return (
-    <section>
-      <h1 className="mb-4 text-4xl font-bold tracking-tight">Status</h1>
-      <p className="mb-6 text-neutral-400">This route calls the server endpoint at /api/status.</p>
-      <button className="border border-white px-4 py-2 font-medium" type="button" onClick={() => void checkStatus()}>
-        Check endpoint
-      </button>
-      <p className="mt-4 font-mono text-sm text-neutral-400">endpoint: {status}</p>
+    <div className="border-l-4 border-yellow-400/50 bg-yellow-400/5 px-6 py-5 my-16">
+      <p className="text-base leading-relaxed text-neutral-300 italic">
+        "Ideas are still cheap. I don't think I'm special for having a whole bunch of ideas.
+        The point of this is that I've seen what you guys do when you're given ideas."
+      </p>
+      <p className="mt-2 text-sm text-neutral-500">— Theo / t3dotgg</p>
+    </div>
+  );
+}
+
+function IdeaCard({ idea, index }: { idea: typeof ideas[number]; index: number }) {
+  return (
+    <article id={`idea-${idea.id}`} className="scroll-mt-16">
+      <div className="flex items-baseline gap-4">
+        <span className="font-mono text-sm text-yellow-400/60">0{idea.id}</span>
+        <h2 className="text-3xl font-bold tracking-tight">{ideaEmojis[index]} {idea.title}</h2>
+      </div>
+      <p className="mt-3 text-neutral-400 leading-relaxed">{idea.tagline}</p>
+      <div className="mt-8 space-y-8">
+        {idea.sections.map((section) => (
+          <div key={section.heading}>
+            <h3 className="text-sm font-semibold uppercase tracking-widest text-neutral-500">{section.heading}</h3>
+            <ul className="mt-3 space-y-2">
+              {section.points.map((point, i) => (
+                <li key={i} className="flex gap-3 text-neutral-300 leading-relaxed">
+                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-yellow-400/60" />
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </article>
+  );
+}
+
+function CallToAction() {
+  return (
+    <section className="border-t border-neutral-800 py-16 text-center">
+      <h2 className="text-2xl font-bold">Go build something</h2>
+      <p className="mt-3 text-neutral-400 max-w-xl mx-auto">
+        "It's time to build bigger stuff. Go kick up an agent and try one of these things out.
+        I bet you'll be surprised just how far you can go."
+      </p>
+      <p className="mt-2 text-sm text-neutral-600">— Theo</p>
     </section>
   );
 }
 
 export function App() {
-  const auth = useAuth();
-  const authLabel = auth.displayName;
-  const authStatus = auth.isLoading && auth.isGuest ? "checking session" : "signed in as " + authLabel;
-
   return (
-    <Router>
-      <main className="min-h-screen bg-black px-6 py-10 text-white">
-        <section className="mx-auto max-w-2xl">
-          <div className="mb-3 flex items-center justify-between gap-3">
-            <div className="flex min-w-0 items-center gap-2">
-              {!auth.isLoading ? <AuthAvatar label={authLabel} picture={auth.picture} /> : null}
-              <p className="min-w-0 truncate font-mono text-sm text-neutral-500">{authStatus}</p>
-            </div>
-            {!auth.isLoading && auth.isGuest ? (
-              <SignInWithGoogle className="shrink-0 border border-neutral-700 px-3 py-1.5 text-sm font-medium text-neutral-200 hover:border-white hover:text-white" />
-            ) : !auth.isLoading ? (
-              <button className="shrink-0 text-sm text-neutral-400 hover:text-white" type="button" onClick={() => signOut()}>
-                Sign out
-              </button>
-            ) : null}
-          </div>
-          <nav className="mb-8 flex gap-4 text-sm text-neutral-400">
-            <Link className="hover:text-white" to="/">Todos</Link>
-            <Link className="hover:text-white" to="/status">Status</Link>
-          </nav>
-          <Routes>
-            <Route path="/" element={<TodoPage />} />
-            <Route path="/status" element={<StatusPage />} />
-            <Route path="*" element={<section><h1 className="mb-4 text-4xl font-bold">Not found</h1><Link className="text-neutral-300 hover:text-white" to="/">Back to todos</Link></section>} />
-          </Routes>
-        </section>
-      </main>
-    </Router>
+    <main className="min-h-screen bg-black px-6 py-10 text-white">
+      <div className="mx-auto max-w-3xl">
+        <Hero />
+        <QuoteBanner />
+        <div className="space-y-24 pb-16">
+          {ideas.map((idea, i) => (
+            <IdeaCard key={idea.id} idea={idea} index={i} />
+          ))}
+        </div>
+        <CallToAction />
+      </div>
+    </main>
   );
 }
