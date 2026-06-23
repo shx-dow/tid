@@ -1,4 +1,6 @@
 import { useState } from "preact/hooks";
+import { useQuery, useMutation } from "lakebed/client";
+import type { StaticProject, VoteCounts } from "../shared/project";
 
 type Idea = {
   id: number;
@@ -238,6 +240,49 @@ const ideas: Idea[] = [
   },
 ];
 
+const projects: StaticProject[] = [
+  {
+    id: "1",
+    title: "Heddle",
+    author: "@loftyPuma",
+    description: "Version control for agent work - an open-source CLI that tracks every change AI agents make, keeps each agent's work separate with reversible history, and stays Git compatible.",
+    url: "https://heddle.sh/",
+    ideaId: "2",
+  },
+  {
+    id: "2",
+    title: "OneCamp",
+    author: "@akashc777",
+    description: "A self-hosted all-in-one workspace for the AI era - chat, docs, tasks, video, calendar, and a local AI assistant in one Docker deploy. No per-seat fees.",
+    url: "https://onemana.dev/",
+    ideaId: "5",
+  },
+  {
+    id: "3",
+    title: "Canto Frierenbench",
+    author: "@dcrebbin_",
+    description: "An LLM benchmark based on the first episode of Cantonese-dubbed Frieren, testing models on generating dual-language SRT subtitle files in a niche language pair.",
+    url: "https://github.com/dcrebbin/canto-frierenbench",
+    ideaId: "6",
+  },
+  {
+    id: "4",
+    title: "Anvil",
+    author: "@aphumphreys",
+    description: "Open-source tools for inspectable developer work - Desktop for repo-aware agent delivery, Registry for safer npm dependency ingress, and Cloud for inspectable app runtime contracts.",
+    url: "https://anvilstack.dev/",
+    ideaId: "1",
+  },
+  {
+    id: "5",
+    title: "Glyph",
+    author: "@bingokingo",
+    description: "Agent-native source control built around permissioned source graphs, continuous work capture, and explicit publication - replaces branches with realms, work contexts, and snapshots.",
+    url: "https://glyph.notdhruv.com/docs/overview/",
+    ideaId: "2",
+  },
+];
+
 function Hero() {
   return (
     <section className="pb-6 pt-16 sm:pb-8 sm:pt-20">
@@ -293,6 +338,99 @@ function IdeaSection({ heading, points }: { heading: string; points: string[] })
   );
 }
 
+function ProjectItem({
+  project,
+  votes,
+  onVote,
+}: {
+  project: StaticProject;
+  votes: { totalVotes: number; userVote: number };
+  onVote: (id: string, value: number) => void;
+}) {
+  return (
+    <div className="flex items-start gap-3 rounded border border-neutral-800/60 bg-neutral-900/30 px-4 py-3">
+      <div className="flex flex-col items-center gap-0 shrink-0 w-8">
+        <button
+          onClick={() => onVote(project.id, 1)}
+          className={`p-1 rounded-t transition-colors ${votes.userVote === 1 ? "text-orange-500" : "text-neutral-600 hover:text-neutral-400"}`}
+          aria-label="Upvote"
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+            <path d="M12 4l-8 8h16z" />
+          </svg>
+        </button>
+        <span className={`text-xs font-mono tabular-nums leading-none py-1 ${votes.userVote === 1 ? "text-orange-500" : votes.userVote === -1 ? "text-red-500" : "text-neutral-500"}`}>{votes.totalVotes}</span>
+        <button
+          onClick={() => onVote(project.id, -1)}
+          className={`p-1 rounded-b transition-colors ${votes.userVote === -1 ? "text-red-500" : "text-neutral-600 hover:text-neutral-400"}`}
+          aria-label="Downvote"
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current">
+            <path d="M12 20l8-8H4z" />
+          </svg>
+        </button>
+      </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-baseline gap-2">
+          <h4 className="text-sm font-medium text-neutral-200">{project.title}</h4>
+          <a
+            href={`https://x.com/${project.author.replace("@", "")}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[11px] text-neutral-600 hover:text-neutral-400 transition-colors"
+          >
+            {project.author}
+          </a>
+        </div>
+        <p className="mt-1 text-xs text-neutral-500 leading-relaxed">{project.description}</p>
+        {project.url ? (
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-1.5 inline-flex items-center gap-1 text-xs text-yellow-400/60 hover:text-yellow-400 transition-colors"
+          >
+            <svg viewBox="0 0 24 24" className="h-3 w-3 fill-current">
+              <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3m-2 16H5V5h8V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-8h-2z" />
+            </svg>
+            {project.url.replace(/^https?:\/\//, "").replace(/\/$/, "")}
+          </a>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function ProjectSection({ ideaId }: { ideaId: string }) {
+  const voteCounts = useQuery<VoteCounts>("voteCounts");
+  const vote = useMutation<[projectId: string, value: number], void>("vote");
+  const ideaProjects = projects.filter((p) => p.ideaId === ideaId);
+
+  async function handleVote(projectId: string, value: number) {
+    await vote(projectId, value);
+  }
+
+  if (ideaProjects.length === 0) return null;
+
+  return (
+    <div className="space-y-3">
+      <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-neutral-500">
+        Projects by the community ({ideaProjects.length})
+      </h3>
+      <div className="space-y-2">
+        {ideaProjects.map((p) => (
+          <ProjectItem
+            key={p.id}
+            project={p}
+            votes={(voteCounts ?? {})[p.id] ?? { totalVotes: 0, userVote: 0 }}
+            onVote={(id, v) => void handleVote(id, v)}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function IdeaCard({ idea, index }: { idea: typeof ideas[number]; index: number }) {
   const [open, setOpen] = useState(false);
   return (
@@ -318,11 +456,13 @@ function IdeaCard({ idea, index }: { idea: typeof ideas[number]; index: number }
           {idea.sections.map((section) => (
             <IdeaSection key={section.heading} heading={section.heading} points={section.points} />
           ))}
+          <ProjectSection ideaId={String(idea.id)} />
         </div>
       )}
     </div>
   );
 }
+
 function FooterSection() {
   return (
     <footer className="mt-20 border-t border-neutral-800/60 pt-10 pb-6">
